@@ -29,26 +29,39 @@ func NewRule(r string) (Rule, error) {
 	return &rule{expr}, nil
 }
 
+
+// Bool 类型规则
 func (r *rule) Bool(x interface{}) (bool, error) {
+
 	typ := reflect.ValueOf(x)
+
+	// 指针解引用
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
 	}
+
+	// 根据表达式求值
 	b, err := getValue(typ, r.expr)
 	if err != nil {
 		return false, err
 	}
+
+	//
 	if r, ok := b.(bool); ok {
 		return r, nil
 	}
+
+	//
 	return false, errors.New("result not bool")
 }
 
+// Int 类型规则
 func (r *rule) Int(x interface{}) (int64, error) {
 	typ := reflect.ValueOf(x)
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
 	}
+	// 根据表达式求值
 	b, err := getValue(typ, r.expr)
 	if err != nil {
 		return 0, err
@@ -61,20 +74,27 @@ func (r *rule) Int(x interface{}) (int64, error) {
 	return 0, errors.New("result not int")
 }
 
+// Float 类型规则
 func (r *rule) Float(x interface{}) (float64, error) {
+
 	typ := reflect.ValueOf(x)
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
 	}
+
+	// 根据表达式求值
 	b, err := getValue(typ, r.expr)
 	if err != nil {
 		return 0, err
 	}
+
 	if r, ok := b.(float64); ok {
 		return r, nil
 	}
+
 	if r, ok := b.(int64); ok {
 		return float64(r), nil
 	}
+
 	return 0, errors.New("result not float")
 }

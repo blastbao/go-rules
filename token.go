@@ -50,9 +50,13 @@ func mathOp(x, y reflect.Value, tk token.Token) (float64, error) {
 
 // 数值比较，暂时支持6种 >, <, >=,<=， ==， !=
 func compare(x, y reflect.Value, tk token.Token) (bool, error) {
+
+	// String 类型
 	if x.Kind() == reflect.String && y.Kind() == reflect.String {
 		return compareString(x.String(), y.String(), tk)
 	}
+
+	// Number 类型
 	numx, err := number(x)
 	if err != nil {
 		return false, err
@@ -81,6 +85,8 @@ func compare(x, y reflect.Value, tk token.Token) (bool, error) {
 
 // 布尔操作 && || 两种
 func boolOp(x, y reflect.Value, tk token.Token) (bool, error) {
+
+	// 类型检查
 	if x.Kind() != reflect.Bool || y.Kind() != reflect.Bool {
 		return false, ErrNotBool
 	}

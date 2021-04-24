@@ -1,3 +1,3 @@
-module go-rules
+module gorules
 
 go 1.14
